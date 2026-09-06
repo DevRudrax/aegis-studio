@@ -44,13 +44,13 @@ try {
 // Global Application State
 const state = {
   activeSessionId: "ses_8930a_prod",
-  activeTenantId: "usr_9981a",
+  activeTenantId: "guest",
   activeModel: "gemini-1.5-pro",
   jsonSchemaMode: true,
   deterministic: true,
-  authToken: "mock-dev-token-" + Date.now(),
-  userEmail: "admin@aegis-enterprise.iam.gserviceaccount.com",
-  displayName: "Enterprise Admin",
+  authToken: "",
+  userEmail: "",
+  displayName: "",
   isAuthenticated: false,
   currentUser: null,
   sessions: [],
@@ -122,7 +122,7 @@ function initDOM() {
 }
 
 // ----------------------------------------------------
-// FIREBASE AUTHENTICATION FLOW
+// FIREBASE AUTHENTICATION FLOW (GENUINE LIVE INTEGRATION)
 // ----------------------------------------------------
 
 function initFirebaseAuthListener() {
@@ -133,7 +133,7 @@ function initFirebaseAuthListener() {
       state.currentUser = user;
       state.isAuthenticated = true;
       state.userEmail = user.email || `${user.uid}@firebase.user`;
-      state.displayName = user.displayName || user.email?.split('@')[0] || "Enterprise User";
+      state.displayName = user.displayName || user.email?.split('@')[0] || "User";
       state.activeTenantId = user.uid;
 
       try {
@@ -143,7 +143,7 @@ function initFirebaseAuthListener() {
       }
 
       updateAuthUI(true);
-      console.log(`[AEGIS/AUTH] User authenticated: ${state.userEmail} (Tenant: users/${user.uid})`);
+      console.log(`[AEGIS/AUTH] User authenticated: ${state.userEmail} (UID: ${user.uid})`);
       showToast(`Signed in as ${state.userEmail}`);
 
       // Refresh tenant scoped resources
@@ -151,9 +151,10 @@ function initFirebaseAuthListener() {
     } else {
       state.currentUser = null;
       state.isAuthenticated = false;
-      state.userEmail = "admin@aegis-enterprise.iam.gserviceaccount.com";
-      state.activeTenantId = "usr_9981a";
-      state.authToken = "mock-dev-token-" + Date.now();
+      state.userEmail = "";
+      state.displayName = "";
+      state.activeTenantId = "guest";
+      state.authToken = "";
       updateAuthUI(false);
     }
   });
@@ -175,7 +176,7 @@ function updateAuthUI(isLoggedIn) {
       userEmailBadge.textContent = state.userEmail;
     }
     if (userAvatarText) {
-      const initials = (state.displayName || state.userEmail || "EA").substring(0, 2).toUpperCase();
+      const initials = (state.displayName || state.userEmail || "U").substring(0, 2).toUpperCase();
       userAvatarText.textContent = initials;
     }
   } else {
@@ -188,7 +189,7 @@ function updateAuthUI(isLoggedIn) {
 
   const authTenantPath = document.getElementById('authTenantPath');
   if (authTenantPath) {
-    authTenantPath.textContent = `users/${state.activeTenantId}/*`;
+    authTenantPath.textContent = state.isAuthenticated ? `users/${state.activeTenantId}/*` : `public/guest`;
   }
 }
 
@@ -199,35 +200,25 @@ window.handleEmailSignIn = async function() {
   const submitBtn = document.getElementById('submitSignInBtn');
 
   if (!email || !password) {
-    showAuthAlert('Please enter both email address and password.', 'error');
+    showAuthAlert('Please enter both your email address and password.', 'error');
     return;
   }
 
-  setAuthButtonLoading(submitBtn, true, 'Authenticating...');
+  setAuthButtonLoading(submitBtn, true, 'Signing in...');
   hideAuthAlert();
 
   try {
-    if (firebaseAuth) {
-      try {
-        await signInWithEmailAndPassword(firebaseAuth, email, password);
-        toggleModal('authModal', false);
-        return;
-      } catch (fbErr) {
-        console.warn('Firebase Email Auth note:', fbErr.code, fbErr.message);
-        // Seamless fallback to official custom token
-        await handleCustomTokenAuth(email, email.split('@')[0]);
-        toggleModal('authModal', false);
-        return;
-      }
-    } else {
-      await handleCustomTokenAuth(email, email.split('@')[0]);
-      toggleModal('authModal', false);
+    if (!firebaseAuth) {
+      throw new Error("Firebase Authentication is not initialized.");
     }
+    const userCred = await signInWithEmailAndPassword(firebaseAuth, email, password);
+    toggleModal('authModal', false);
+    showToast(`Signed in as ${userCred.user.email}`);
   } catch (error) {
-    console.error('Sign in error:', error);
-    showAuthAlert(formatFirebaseAuthError(error.code || error.message), 'error');
+    console.error('[AEGIS/AUTH] Email sign in error:', error);
+    showAuthAlert(formatFirebaseAuthError(error.code, error.message), 'error');
   } finally {
-    setAuthButtonLoading(submitBtn, false, 'Sign In with Firebase');
+    setAuthButtonLoading(submitBtn, false, 'Sign In with Email');
   }
 };
 
@@ -248,106 +239,56 @@ window.handleEmailRegister = async function() {
     return;
   }
 
-  setAuthButtonLoading(submitBtn, true, 'Provisioning Tenant...');
+  setAuthButtonLoading(submitBtn, true, 'Creating Account...');
   hideAuthAlert();
 
   try {
-    if (firebaseAuth) {
-      try {
-        const userCred = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-        if (name && userCred.user) {
-          await updateProfile(userCred.user, { displayName: name });
-        }
-        toggleModal('authModal', false);
-        showToast(`Account provisioned & scoped to users/${userCred.user.uid}`);
-        return;
-      } catch (fbErr) {
-        console.warn('Firebase register note:', fbErr.code, fbErr.message);
-        await handleCustomTokenAuth(email, name);
-        toggleModal('authModal', false);
-        return;
-      }
-    } else {
-      await handleCustomTokenAuth(email, name);
-      toggleModal('authModal', false);
+    if (!firebaseAuth) {
+      throw new Error("Firebase Authentication is not initialized.");
     }
+    const userCred = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+    if (name && userCred.user) {
+      await updateProfile(userCred.user, { displayName: name });
+    }
+    toggleModal('authModal', false);
+    showToast(`Account created! Welcome, ${name || email}`);
   } catch (error) {
-    console.error('Registration error:', error);
-    showAuthAlert(formatFirebaseAuthError(error.code || error.message), 'error');
+    console.error('[AEGIS/AUTH] Registration error:', error);
+    showAuthAlert(formatFirebaseAuthError(error.code, error.message), 'error');
   } finally {
     setAuthButtonLoading(submitBtn, false, 'Create Account');
   }
 };
 
-// Google Sign In
+// Google Sign In (Actual Firebase Google Auth Popup)
 window.handleGoogleSignIn = async function() {
   hideAuthAlert();
   const googleBtn = document.getElementById('googleSignInBtn');
-  setAuthButtonLoading(googleBtn, true, 'Connecting Google...');
+  setAuthButtonLoading(googleBtn, true, 'Connecting to Google...');
 
   try {
-    if (firebaseAuth && googleProvider) {
-      try {
-        await signInWithPopup(firebaseAuth, googleProvider);
-        toggleModal('authModal', false);
-        return;
-      } catch (fbErr) {
-        console.warn('Firebase Google Auth popup error:', fbErr.code, fbErr.message);
-        await handleCustomTokenAuth('r.p.singh7439@gmail.com', 'Rudra Pratap Singh');
-        toggleModal('authModal', false);
-        return;
-      }
-    } else {
-      await handleCustomTokenAuth('r.p.singh7439@gmail.com', 'Rudra Pratap Singh');
-      toggleModal('authModal', false);
+    if (!firebaseAuth) {
+      throw new Error("Firebase Authentication is not initialized.");
     }
+    if (!googleProvider) {
+      googleProvider = new GoogleAuthProvider();
+    }
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+    const result = await signInWithPopup(firebaseAuth, googleProvider);
+    const user = result.user;
+    toggleModal('authModal', false);
+    showToast(`Welcome, ${user.displayName || user.email}!`);
   } catch (error) {
-    console.error('Google Sign-In error:', error);
-    showAuthAlert(formatFirebaseAuthError(error.code || error.message), 'error');
+    console.error('[AEGIS/AUTH] Google Sign-In error:', error);
+    if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+      showAuthAlert('Google Sign-In was closed before completing.', 'info');
+    } else {
+      showAuthAlert(formatFirebaseAuthError(error.code, error.message), 'error');
+    }
   } finally {
     setAuthButtonLoading(googleBtn, false, 'Sign in with Google');
   }
-};
-
-// Generic Custom Token Authentication Helper
-async function handleCustomTokenAuth(email, name) {
-  const userEmail = email || "r.p.singh7439@gmail.com";
-  const userName = name || userEmail.split('@')[0] || "Enterprise Architect";
-  
-  try {
-    const res = await fetch('/api/auth/custom-token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: userEmail, name: userName })
-    });
-    const data = await res.json();
-    if (data.customToken && firebaseAuth) {
-      try {
-        await signInWithCustomToken(firebaseAuth, data.customToken);
-        showToast(`Signed in as ${userEmail}`);
-        return;
-      } catch (authErr) {
-        console.warn('[AEGIS/AUTH] Custom token sign-in client note:', authErr.message);
-      }
-    }
-  } catch (e) {
-    console.warn('[AEGIS/AUTH] Custom token fetch note:', e.message);
-  }
-
-  state.isAuthenticated = true;
-  state.userEmail = userEmail;
-  state.displayName = userName;
-  state.activeTenantId = "usr_" + btoa(state.userEmail).substring(0, 8).toLowerCase();
-  state.authToken = "auth-token-" + Date.now();
-  updateAuthUI(true);
-  showToast(`Signed in as ${state.userEmail}`);
-}
-
-// 1-Click Demo Enterprise Sign In
-window.handleDemoSignIn = async function() {
-  hideAuthAlert();
-  await handleCustomTokenAuth("admin@aegis-enterprise.iam.gserviceaccount.com", "Enterprise Admin");
-  toggleModal('authModal', false);
 };
 
 // Password Reset Request
@@ -360,20 +301,18 @@ window.handlePasswordReset = async function() {
     return;
   }
 
-  setAuthButtonLoading(submitBtn, true, 'Sending Reset Link...');
+  setAuthButtonLoading(submitBtn, true, 'Sending Reset Email...');
   hideAuthAlert();
 
   try {
-    if (firebaseAuth) {
-      try {
-        await sendPasswordResetEmail(firebaseAuth, email);
-      } catch (fbErr) {
-        console.warn('Firebase reset email note:', fbErr.message);
-      }
+    if (!firebaseAuth) {
+      throw new Error("Firebase Authentication is not initialized.");
     }
-    showAuthAlert(`Password reset link sent to ${email}. Check your inbox.`, 'success');
+    await sendPasswordResetEmail(firebaseAuth, email);
+    showAuthAlert(`Password reset link sent to ${email}. Please check your inbox and spam folder.`, 'success');
   } catch (error) {
-    showAuthAlert(`Password reset link sent to ${email}. Check your inbox.`, 'success');
+    console.error('[AEGIS/AUTH] Password reset error:', error);
+    showAuthAlert(formatFirebaseAuthError(error.code, error.message), 'error');
   } finally {
     setAuthButtonLoading(submitBtn, false, 'Send Password Reset Email');
   }
@@ -381,50 +320,55 @@ window.handlePasswordReset = async function() {
 
 // Sign Out
 window.handleSignOut = async function() {
-  if (firebaseAuth && state.currentUser) {
-    await signOut(firebaseAuth);
+  try {
+    if (firebaseAuth) {
+      await signOut(firebaseAuth);
+    }
+  } catch (e) {
+    console.warn('[AEGIS/AUTH] Sign out error:', e);
   }
   state.currentUser = null;
   state.isAuthenticated = false;
-  state.userEmail = "anonymous@aegis.io";
-  state.displayName = "Anonymous User";
-  state.activeTenantId = "usr_anon_" + Date.now().toString(36);
+  state.userEmail = "";
+  state.displayName = "";
+  state.activeTenantId = "guest";
+  state.authToken = "";
   updateAuthUI(false);
-  showToast('Signed out of session');
+  showToast('Signed out successfully.');
 };
 
 // Format Firebase Error Codes to User Friendly Messages
-function formatFirebaseAuthError(code) {
+function formatFirebaseAuthError(code, message) {
   switch (code) {
     case 'auth/configuration-not-found':
     case 'auth/operation-not-allowed':
-      return 'Google Sign-In is not enabled in Firebase Console (Authentication > Sign-in method > Google). Please enable it in project "rudra-584b5".';
+      return 'Google/Email Sign-In is not enabled in Firebase Console. Please go to Firebase Console > Authentication > Sign-in method and enable Google & Email/Password for project "rudra-584b5".';
     case 'auth/unauthorized-domain':
-      return 'Domain not authorized. Add "localhost" under Firebase Console > Authentication > Settings > Authorized domains.';
+      return `The domain "${window.location.hostname}" is not authorized. In Firebase Console, go to Authentication > Settings > Authorized domains and add "${window.location.hostname}".`;
     case 'auth/popup-blocked':
-      return 'Sign-In popup was blocked by browser. Please enable popups for localhost:8080.';
+      return 'The sign-in popup was blocked by your browser. Please allow popups for this site.';
     case 'auth/popup-closed-by-user':
     case 'auth/cancelled-popup-request':
-      return 'Google Sign-In popup was closed before completing.';
+      return 'The Google sign-in window was closed before completing authentication.';
     case 'auth/invalid-email':
-      return 'The email address is improperly formatted.';
+      return 'Please enter a valid email address.';
     case 'auth/user-disabled':
-      return 'This enterprise user account has been disabled.';
+      return 'This user account has been disabled.';
     case 'auth/user-not-found':
-      return 'No account exists with this email. Please create an account.';
     case 'auth/wrong-password':
     case 'auth/invalid-credential':
-      return 'Invalid credentials. Please verify your email and password.';
+    case 'auth/invalid-login-credentials':
+      return 'Invalid email or password. Please verify your credentials and try again.';
     case 'auth/email-already-in-use':
-      return 'An account already exists with this email address.';
+      return 'An account already exists with this email address. Please sign in instead.';
     case 'auth/weak-password':
-      return 'The password is too weak. Please use at least 6 characters.';
+      return 'Password must be at least 6 characters long.';
     case 'auth/too-many-requests':
-      return 'Access temporarily locked due to unusual activity. Try again later.';
+      return 'Access temporarily disabled due to multiple failed login attempts. Try again later or reset your password.';
     case 'auth/network-request-failed':
-      return 'Network connection failed. Check your internet connection.';
+      return 'Network connection error. Please check your connection and retry.';
     default:
-      return code || 'Authentication error. Please try again.';
+      return message || code || 'Authentication failed. Please verify and try again.';
   }
 }
 

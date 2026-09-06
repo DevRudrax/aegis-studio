@@ -155,10 +155,10 @@
         <div class="hidden items-center gap-2" id="userAuthContainer">
           <button class="flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-[#18181B] border border-[#27272A] hover:border-[#52525B] transition-colors" id="authTriggerBtn" title="Account & Authentication">
             <div class="w-6 h-6 rounded-full bg-white text-[#18181B] flex items-center justify-center font-bold text-[10px]" id="userAvatarText">
-              EA
+              U
             </div>
             <span class="font-mono text-xs text-[#FAFAFA] max-w-[180px] truncate" id="userEmailBadge">
-              admin@aegis-enterprise.iam.gserviceaccount.com
+              user@example.com
             </span>
           </button>
           <button class="p-1.5 rounded-[2px] text-[#71717A] hover:text-white hover:bg-[#27272A] transition-colors" onclick="handleSignOut()" title="Sign Out">
@@ -496,7 +496,7 @@
         <form class="space-y-3.5" id="formSignIn" onsubmit="event.preventDefault(); handleEmailSignIn();">
           <div>
             <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">EMAIL ADDRESS</label>
-            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="signInEmail" placeholder="architect@enterprise.io" type="email" required value="admin@aegis-enterprise.iam.gserviceaccount.com"/>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="signInEmail" placeholder="you@example.com" type="email" required autocomplete="email"/>
           </div>
           <div>
             <div class="flex items-center justify-between mb-1.5">
@@ -505,11 +505,11 @@
                 Forgot Password?
               </button>
             </div>
-            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="signInPassword" placeholder="••••••••••••" type="password" required value="password123"/>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="signInPassword" placeholder="••••••••••••" type="password" required autocomplete="current-password"/>
           </div>
 
           <button type="submit" class="w-full py-2.5 rounded-[2px] bg-white text-[#18181B] hover:bg-[#F4F4F5] transition-all font-sans text-xs font-semibold tracking-wide flex items-center justify-center gap-2 active:scale-[0.99] shadow" id="submitSignInBtn">
-            <span>Sign In with Firebase</span>
+            <span>Sign In with Email</span>
             <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
           </button>
         </form>
@@ -518,15 +518,15 @@
         <form class="space-y-3.5 hidden" id="formRegister" onsubmit="event.preventDefault(); handleEmailRegister();">
           <div>
             <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">FULL NAME</label>
-            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regName" placeholder="Enterprise Architect" type="text" required/>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regName" placeholder="Your Name" type="text" required autocomplete="name"/>
           </div>
           <div>
             <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">EMAIL ADDRESS</label>
-            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regEmail" placeholder="architect@enterprise.io" type="email" required/>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regEmail" placeholder="you@example.com" type="email" required autocomplete="email"/>
           </div>
           <div>
             <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">PASSWORD</label>
-            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regPassword" placeholder="•••••••••••• (Min. 6 Characters)" type="password" minlength="6" required/>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regPassword" placeholder="•••••••••••• (Min. 6 Characters)" type="password" minlength="6" required autocomplete="new-password"/>
           </div>
           
           <button type="submit" class="w-full py-2.5 rounded-[2px] bg-white text-[#18181B] hover:bg-[#F4F4F5] transition-all font-sans text-xs font-semibold tracking-wide flex items-center justify-center gap-2 active:scale-[0.99] shadow" id="submitRegisterBtn">
@@ -542,7 +542,7 @@
           </p>
           <div>
             <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">EMAIL ADDRESS</label>
-            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="resetEmail" placeholder="architect@enterprise.io" type="email" required/>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="resetEmail" placeholder="you@example.com" type="email" required autocomplete="email"/>
           </div>
           <button type="submit" class="w-full py-2.5 rounded-[2px] bg-white text-[#18181B] hover:bg-[#F4F4F5] transition-all font-sans text-xs font-semibold tracking-wide flex items-center justify-center gap-2 shadow" id="submitResetBtn">
             <span>Send Password Reset Email</span>
@@ -572,12 +572,6 @@
               <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16c1.8 3.7 5.6 6.3 10.1 6.3z"/>
             </svg>
             <span>Sign in with Google</span>
-          </button>
-
-          <!-- 1-Click Demo Account Access -->
-          <button type="button" class="w-full py-2 rounded-[2px] bg-[#201f22] hover:bg-[#27272A] border border-[#27272A] text-[#A1A1AA] hover:text-white font-mono text-[11px] transition-colors flex items-center justify-center gap-1.5" id="demoLoginBtn" onclick="handleDemoSignIn()">
-            <span class="material-symbols-outlined text-[14px]">badge</span>
-            <span>1-Click Enterprise Service Account Access</span>
           </button>
         </div>
 
