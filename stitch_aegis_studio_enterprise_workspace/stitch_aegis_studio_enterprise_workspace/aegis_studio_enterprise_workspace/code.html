@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {"darkMode":"class","theme":{"extend":{"colors":{"surface-container-high":"#2a2a2c","background":"#131315","inverse-primary":"#5d5f5f","secondary-container":"#45464e","tertiary-fixed-dim":"#c6c5cf","tertiary":"#ffffff","primary":"#ffffff","on-primary":"#2f3131","tertiary-fixed":"#e3e1ec","surface-container-highest":"#353437","inverse-on-surface":"#313032","on-primary-fixed":"#1a1c1c","on-error-container":"#ffdad6","secondary-fixed-dim":"#c6c6cf","error-container":"#93000a","surface-variant":"#353437","on-surface-variant":"#c4c7c8","surface":"#131315","outline":"#8e9192","on-secondary-fixed":"#1a1b22","secondary-fixed":"#e2e1eb","tertiary-container":"#e3e1ec","on-tertiary":"#2f3038","outline-variant":"#444748","surface-container-lowest":"#0e0e10","primary-fixed-dim":"#c6c6c7","on-surface":"#e5e1e4","surface-tint":"#c6c6c7","on-background":"#e5e1e4","on-tertiary-fixed":"#1a1b22","on-primary-fixed-variant":"#454747","secondary":"#c6c6cf","error":"#ffb4ab","surface-container-low":"#1c1b1d","inverse-surface":"#e5e1e4","on-tertiary-container":"#63646c","on-secondary-container":"#b4b4bd","on-primary-container":"#636565","on-secondary-fixed-variant":"#45464e","surface-container":"#201f22","surface-dim":"#131315","primary-fixed":"#e2e2e2","surface-bright":"#39393b","on-error":"#690005","on-secondary":"#2f3037","on-tertiary-fixed-variant":"#46464e","primary-container":"#e2e2e2"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-lg":"1.5rem","gutter-compact":"0.5rem","space-xs":"0.25rem","space-base":"1rem","space-sm":"0.5rem","gutter-standard":"1rem","space-md":"0.75rem","space-2xl":"3rem","sidebar-width":"16rem","space-xl":"2rem","space-2xs":"0.125rem","inspector-width":"22rem"},"fontFamily":{"headline-lg":["Inter"],"body-lg":["Inter"],"label-md":["JetBrains Mono"],"caption":["Inter"],"code-sm":["JetBrains Mono"],"headline-sm":["Inter"],"body-sm":["Inter"],"display-lg":["Inter"],"label-sm":["JetBrains Mono"],"body-md":["Inter"],"headline-md":["Inter"]},"fontSize":{"headline-lg":["24px",{"lineHeight":"32px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["15px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"18px","letterSpacing":"-0.01em","fontWeight":"500"}],"caption":["11px",{"lineHeight":"14px","letterSpacing":"0.01em","fontWeight":"400"}],"code-sm":["11px",{"lineHeight":"16px","letterSpacing":"0em","fontWeight":"400"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"display-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.025em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"body-md":["13px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.015em","fontWeight":"600"}]}}}};</script></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest border-b border-outline-variant/30 h-14"><div class="h-14 w-full px-space-base flex items-center justify-between gap-space-base"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs"><div class="w-7 h-7 bg-primary text-on-primary flex items-center justify-center rounded"><span class="material-symbols-outlined text-[18px]">shield</span></div><span class="font-headline-sm text-headline-sm font-semibold tracking-tight text-primary">AEGIS <span class="text-outline">/</span> STUDIO</span></div><div class="h-4 w-[1px] bg-outline-variant/40"></div><div class="inline-flex items-center gap-space-xs px-space-xs py-space-2xs rounded bg-surface-container-high border border-outline-variant/30"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface">GCP Cloud Run : Active</span></div></div><div class="hidden xl:flex items-center gap-space-xs px-space-sm py-space-2xs rounded bg-surface-container border border-outline-variant/20"><span class="material-symbols-outlined text-outline text-[14px]">terminal</span><span class="font-code-sm text-code-sm text-secondary">production-asia-east1 · v2.4.1-rc</span></div><div class="flex items-center gap-space-sm"><div class="hidden lg:flex items-center gap-space-xs px-space-xs py-space-2xs rounded bg-surface-container-low border border-outline-variant/20"><span class="material-symbols-outlined text-outline text-[14px]">verified_user</span><span class="font-code-sm text-code-sm text-secondary">Firebase Auth</span></div><div class="hidden md:flex items-center gap-space-xs px-space-xs py-space-2xs rounded bg-surface-container-low border border-outline-variant/20"><span class="material-symbols-outlined text-outline text-[14px]">public</span><span class="font-code-sm text-code-sm text-secondary">asia-east1 (Taiwan)</span></div><div class="hidden md:flex items-center gap-space-xs px-space-xs py-space-2xs rounded bg-surface-container-low border border-outline-variant/20"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span><span class="font-code-sm text-code-sm text-secondary">24ms · 99.98% SLA</span></div><div class="h-4 w-[1px] bg-outline-variant/40 hidden md:block"></div><button class="px-space-xs py-space-2xs rounded bg-transparent hover:bg-surface-container-high text-outline hover:text-on-surface transition-colors flex items-center gap-space-2xs"><span class="material-symbols-outlined text-[16px]">menu_book</span><span class="font-body-sm text-body-sm hidden sm:inline">Docs</span></button><button class="px-space-xs py-space-2xs rounded bg-transparent hover:bg-surface-container-high text-outline hover:text-on-surface transition-colors flex items-center gap-space-2xs"><span class="material-symbols-outlined text-[16px]">key</span><span class="font-body-sm text-body-sm hidden sm:inline">API Keys</span></button><button class="px-space-xs py-space-2xs rounded bg-transparent hover:bg-surface-container-high text-outline hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[16px]">terminal</span></button><div class="flex items-center gap-space-xs pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-code-sm text-code-sm text-on-surface-variant hidden 2xl:inline max-w-[200px] truncate">admin@aegis-enterprise.iam.gserviceaccount.com</span></div></div></div></header><aside class="fixed left-0 top-14 bottom-0 w-sidebar-width bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col z-40"><div class="p-space-base border-b border-outline-variant/20"><div class="font-label-sm text-label-sm uppercase tracking-wider text-outline mb-space-2xs">Scope Browser</div><div class="font-body-md text-body-md font-medium text-on-surface truncate">Enterprise Cluster 01</div></div><nav class="flex-1 p-space-sm space-y-space-2xs overflow-y-auto" data-active-classes="bg-surface-container-high text-primary font-medium"><a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-space-xs rounded transition-colors bg-surface-container-high text-primary font-medium" data-path="overview-dashboard" href="#"><span class="material-symbols-outlined text-[18px]">grid_view</span><span class="font-body-md text-body-md">Workspace Overview</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="cloud-run-services" href="#"><span class="material-symbols-outlined text-[18px]">cloud</span><span class="font-body-md text-body-md">Cloud Run Services</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="model-deployments" href="#"><span class="material-symbols-outlined text-[18px]">neurology</span><span class="font-body-md text-body-md">Model Deployments</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="telemetry-and-metrics" href="#"><span class="material-symbols-outlined text-[18px]">monitoring</span><span class="font-body-md text-body-md">Telemetry &amp; SLAs</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="security-and-iam" href="#"><span class="material-symbols-outlined text-[18px]">shield_person</span><span class="font-body-md text-body-md">Security &amp; IAM</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="audit-logs" href="#"><span class="material-symbols-outlined text-[18px]">receipt_long</span><span class="font-body-md text-body-md">Audit Logs</span></a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="api-key-manager" href="#"><span class="material-symbols-outlined text-[18px]">key</span><span class="font-body-md text-body-md">API Keys &amp; Tokens</span></a></nav><div class="p-space-sm border-t border-outline-variant/20 bg-surface-container-low"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-outline uppercase">Status</span><span class="font-code-sm text-code-sm text-primary">ALL RUNTIMES GREEN</span></div></div></aside><div class="pl-sidebar-width"><main class="relative pt-14 w-full bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Asymmetric Workspace Shell: Left 65% / Right 35% -->
+<div class="w-full flex flex-col xl:flex-row items-stretch min-h-[calc(100vh-3.5rem)]">
+<!-- ========================================== -->
+<!-- LEFT PANEL: 65% Primary Intelligence Workspace -->
+<!-- ========================================== -->
+<div class="w-full xl:w-[65%] flex flex-col justify-between bg-surface-container-lowest border-b xl:border-b-0 xl:border-r border-outline-variant/30">
+<!-- Sub-Header & Scope Metadata Bar -->
+<div class="px-space-lg py-space-md border-b border-outline-variant/30 bg-surface-container-low flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm flex-wrap">
+<div class="flex items-center gap-space-xs text-outline font-code-sm text-code-sm">
+<span class="text-on-surface-variant font-medium">Projects</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface">enterprise-core-89</span>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-medium tracking-tight">Session: ses_8930a_prod</span>
+</div>
+<div class="h-3 w-[1px] bg-outline-variant/40 hidden sm:block"></div>
+<div class="inline-flex items-center gap-space-xs px-space-xs py-space-2xs rounded bg-surface-container-high border border-outline-variant/30">
+<span class="material-symbols-outlined text-[13px] text-primary">neurology</span>
+<span class="font-code-sm text-code-sm text-on-surface font-medium">gemini-1.5-pro-002</span>
+<span class="text-outline-variant">|</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">t: 0.2</span>
+<span class="text-outline-variant">|</span>
+<span class="font-code-sm text-code-sm text-secondary">12.4k / 1.0M tok</span>
+</div>
+</div>
+<!-- Action Controls -->
+<div class="flex items-center gap-space-xs">
+<button class="px-space-xs py-space-2xs rounded bg-surface-container border border-outline-variant/30 text-on-surface hover:text-primary hover:border-outline text-body-sm font-body-sm transition-colors flex items-center gap-space-2xs" id="viewConstitutionBtn">
+<span class="material-symbols-outlined text-[14px]">policy</span>
+<span class="hidden sm:inline">Constitution View</span>
+</button>
+<button class="px-space-xs py-space-2xs rounded bg-surface-container border border-outline-variant/30 text-on-surface hover:text-primary hover:border-outline text-body-sm font-body-sm transition-colors flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[14px]">code</span>
+<span class="hidden sm:inline">Export JSON</span>
+</button>
+<button class="p-space-2xs rounded bg-surface-container border border-outline-variant/30 text-outline hover:text-on-surface hover:border-outline transition-colors" title="Clear Context">
+<span class="material-symbols-outlined text-[15px]">delete_sweep</span>
+</button>
+</div>
+</div>
+<!-- Interaction Stream Canvas -->
+<div class="flex-1 overflow-y-auto px-space-lg py-space-xl space-y-space-xl">
+<!-- Turn 1: User Query (Graphite Capsule) -->
+<div class="flex flex-col items-end space-y-space-2xs max-w-2xl ml-auto">
+<div class="px-space-base py-space-sm bg-surface-container-highest border border-outline-variant/40 rounded-lg text-primary text-body-md font-body-md shadow-sm selection:bg-primary selection:text-surface-container-lowest">
+            Analyze Q3 infrastructure audit log for unauthorized egress anomalies across asia-east1 VPC subnets and extract immediate remediation tasks.
+          </div>
+<div class="flex items-center gap-space-xs text-outline font-code-sm text-code-sm">
+<span>14:22:05 UTC</span>
+<span>·</span>
+<span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">badge</span> via Service Account</span>
+</div>
+</div>
+<!-- Turn 1: AI Response (Gemini Engine Card) -->
+<div class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg overflow-hidden shadow-sm">
+<!-- Engine Header -->
+<div class="px-space-base py-space-xs bg-surface-container border-b border-outline-variant/30 flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center gap-space-2xs px-space-xs py-space-2xs rounded bg-surface-container-highest border border-outline-variant/40 font-code-sm text-code-sm text-primary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                Gemini 1.5 Pro
+              </span>
+<span class="font-code-sm text-code-sm text-outline">1.42s · 842 tok/sec</span>
+</div>
+<div class="inline-flex items-center gap-space-2xs px-space-xs py-space-2xs rounded bg-surface-container-high border border-outline-variant/30 font-code-sm text-code-sm text-secondary">
+<span class="material-symbols-outlined text-[13px] text-primary">verified</span>
+              Validated by Aegis Guardrail
+            </div>
+</div>
+<!-- Card Content Body -->
+<div class="p-space-base space-y-space-lg">
+<!-- Section A: Executive Summary -->
+<div class="space-y-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">01 / Executive Summary</span>
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                Zero unauthorized egress vectors detected in <span class="font-code-sm text-code-sm text-primary bg-surface-container-high px-1 py-0.5 rounded">asia-east1</span>. Cloud Run serverless VPC access connector ingress paths align strictly with CIDR block <code class="font-code-sm text-code-sm text-secondary">10.8.0.0/28</code>. Elastic container instance scaling responded within nominal bounds with zero dropped packages.
+              </p>
+</div>
+<!-- Section B: Extracted Key Insights (Data Matrix) -->
+<div class="space-y-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">02 / Telemetry Insight Grid</span>
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+</div>
+<div class="overflow-x-auto rounded border border-outline-variant/30">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant/30">
+<th class="px-space-md py-space-xs font-label-sm text-label-sm text-outline uppercase">Metric Descriptor</th>
+<th class="px-space-md py-space-xs font-label-sm text-label-sm text-outline uppercase">Evaluated Value</th>
+<th class="px-space-md py-space-xs font-label-sm text-label-sm text-outline uppercase">Threshold SLA</th>
+<th class="px-space-md py-space-xs font-label-sm text-label-sm text-outline uppercase text-right">Assessment</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 font-code-sm text-code-sm">
+<tr class="hover:bg-surface-container/50 transition-colors">
+<td class="px-space-md py-space-xs text-on-surface">VPC Connector Throughput</td>
+<td class="px-space-md py-space-xs text-primary font-medium">94.2 MB/s</td>
+<td class="px-space-md py-space-xs text-outline">&lt; 300 MB/s</td>
+<td class="px-space-md py-space-xs text-right text-primary">NORMAL</td>
+</tr>
+<tr class="hover:bg-surface-container/50 transition-colors">
+<td class="px-space-md py-space-xs text-on-surface">Identity-Aware Proxy Handshakes</td>
+<td class="px-space-md py-space-xs text-primary font-medium">42,109 valid / 0 failed</td>
+<td class="px-space-md py-space-xs text-outline">0 Drops Allowed</td>
+<td class="px-space-md py-space-xs text-right text-primary">NOMINAL</td>
+</tr>
+<tr class="hover:bg-surface-container/50 transition-colors">
+<td class="px-space-md py-space-xs text-on-surface">Cloud Run Instance Concurrency</td>
+<td class="px-space-md py-space-xs text-primary font-medium">avg 18.4 req/inst</td>
+<td class="px-space-md py-space-xs text-outline">≤ 80 req/inst</td>
+<td class="px-space-md py-space-xs text-right text-primary">OPTIMAL</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Section C: Action Items Checklist -->
+<div class="space-y-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">03 / Bulleted Remediation Directives</span>
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+</div>
+<div class="space-y-space-xs">
+<div class="flex items-start gap-space-sm p-space-xs rounded bg-surface-container-high/30 border border-outline-variant/20">
+<span class="font-code-sm text-code-sm text-primary bg-surface-container px-1 py-0.5 rounded border border-outline-variant/40 mt-0.5">VERIFIED</span>
+<div class="flex-1 font-body-sm text-body-sm text-on-surface">
+                    IAM Policy binding scoped strictly to least-privilege runtime service account (<code class="font-code-sm text-code-sm text-secondary">sa-run-prod@aegis.iam</code>).
+                  </div>
+</div>
+<div class="flex items-start gap-space-sm p-space-xs rounded bg-surface-container-high/30 border border-outline-variant/20">
+<span class="font-code-sm text-code-sm text-outline-variant bg-surface-container px-1 py-0.5 rounded border border-outline-variant/40 mt-0.5">RECOMMENDED</span>
+<div class="flex-1 font-body-sm text-body-sm text-on-surface">
+                    Rotate Firebase Custom Token private signing keys in Secret Manager before quarterly cutover (2025-Q1 target).
+                  </div>
+</div>
+<div class="flex items-start gap-space-sm p-space-xs rounded bg-surface-container-high/30 border border-outline-variant/20">
+<span class="font-code-sm text-code-sm text-secondary bg-surface-container px-1 py-0.5 rounded border border-outline-variant/40 mt-0.5">SCHEDULED</span>
+<div class="flex-1 font-body-sm text-body-sm text-on-surface">
+                    Daily Cloud Firestore partitioned snapshot replication into multi-region backup storage bucket.
+                  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Turn 2: User Query -->
+<div class="flex flex-col items-end space-y-space-2xs max-w-2xl ml-auto">
+<div class="px-space-base py-space-sm bg-surface-container-highest border border-outline-variant/40 rounded-lg text-primary text-body-md font-body-md shadow-sm">
+            Commit verification snapshot directly to user journal collection in Firestore with tenant hash.
+          </div>
+<div class="flex items-center gap-space-xs text-outline font-code-sm text-code-sm">
+<span>14:24:19 UTC</span>
+</div>
+</div>
+<!-- Turn 2: AI Execution Response -->
+<div class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg overflow-hidden shadow-sm">
+<div class="px-space-base py-space-xs bg-surface-container border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-code-sm text-code-sm text-primary font-medium">Transaction Complete</span>
+<span class="font-code-sm text-code-sm text-outline">Latency: 42ms · 200 OK</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant bg-surface-container-highest px-1.5 py-0.5 rounded">Firestore Driver v3.1</span>
+</div>
+<div class="p-space-base space-y-space-sm">
+<div class="text-body-md font-body-md text-on-surface">
+              Journal snapshot successfully persisted. Atomic write operation committed across <code class="font-code-sm text-code-sm text-primary">asia-east1</code> replica group.
+            </div>
+<div class="p-space-sm bg-surface-container-lowest border border-outline-variant/40 rounded font-code-sm text-code-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm truncate">
+<span class="text-outline">DOCUMENT ID:</span>
+<span class="text-primary font-medium">doc_txn_4418a992bf01</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors flex items-center gap-1 text-[11px]" onclick="navigator.clipboard.writeText('doc_txn_4418a992bf01')">
+<span class="material-symbols-outlined text-[13px]">content_copy</span>
+<span>COPY ID</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pinned Operational Interaction Bar -->
+<div class="sticky bottom-0 left-0 right-0 p-space-base bg-surface-container-lowest border-t border-outline-variant/30 backdrop-blur-md">
+<div class="w-full bg-surface-container border border-outline-variant/40 rounded-lg p-space-xs space-y-space-xs shadow-md">
+<!-- Textarea prompt container -->
+<div class="flex items-center gap-space-sm px-space-xs">
+<button class="text-outline hover:text-primary transition-colors p-space-2xs rounded hover:bg-surface-container-high" title="Attach IAM Policy / Schema">
+<span class="material-symbols-outlined text-[18px]">attachment</span>
+</button>
+<input class="w-full bg-transparent border-none outline-none text-on-surface placeholder:text-outline text-body-md font-body-md focus:ring-0" id="promptInput" placeholder="Enter operational command or infrastructure prompt..." type="text"/>
+<div class="hidden md:flex items-center gap-1 px-space-xs py-space-2xs rounded bg-surface-container-high border border-outline-variant/30 text-outline font-code-sm text-code-sm">
+<span>⌘</span><span>K</span>
+</div>
+</div>
+<!-- Parameter Toggle Tray & Run Trigger -->
+<div class="flex flex-wrap items-center justify-between pt-space-xs border-t border-outline-variant/20 px-space-xs">
+<div class="flex items-center gap-space-sm">
+<label class="inline-flex items-center gap-space-2xs cursor-pointer select-none">
+<input checked="" class="w-3.5 h-3.5 rounded bg-surface border border-outline-variant text-primary focus:ring-0 accent-primary" type="checkbox"/>
+<span class="font-code-sm text-code-sm text-on-surface-variant">JSON Schema Mode</span>
+</label>
+<span class="text-outline-variant">·</span>
+<label class="inline-flex items-center gap-space-2xs cursor-pointer select-none">
+<input checked="" class="w-3.5 h-3.5 rounded bg-surface border border-outline-variant text-primary focus:ring-0 accent-primary" type="checkbox"/>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Deterministic (0.0)</span>
+</label>
+</div>
+<button class="px-space-md py-space-2xs rounded bg-primary text-on-primary hover:bg-primary-fixed transition-colors font-headline-sm text-headline-sm font-semibold flex items-center gap-space-xs">
+<span>Execute</span>
+<span class="material-symbols-outlined text-[16px]">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- RIGHT PANEL: 35% Security & Firestore Observability -->
+<!-- ========================================== -->
+<div class="w-full xl:w-[35%] bg-surface-container-low flex flex-col p-space-base space-y-space-base overflow-y-auto">
+<!-- Header Banner Card: Pure Graphite Aesthetic -->
+<div class="w-full p-space-base bg-surface-container-lowest border border-outline-variant/40 rounded-lg shadow-sm">
+<div class="flex items-start justify-between">
+<div>
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-outline mb-0.5">Control Plane</div>
+<h2 class="font-headline-sm text-headline-sm text-primary font-semibold">Security &amp; Firestore Engine</h2>
+<div class="font-code-sm text-code-sm text-secondary mt-1">Cloud Run Runtime Telemetry · asia-east1</div>
+</div>
+<div class="flex items-center gap-1.5 px-space-xs py-space-2xs rounded bg-surface-container border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-code-sm text-code-sm text-primary font-medium">LIVE</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs border-t border-outline-variant/20 flex items-center justify-between text-outline font-code-sm text-code-sm">
+<span>TRANSPORT:</span>
+<span class="text-on-surface font-mono">grpc://firestore.googleapis.com:443</span>
+</div>
+</div>
+<!-- Card 1: AI Guardrails & Constitution Directives -->
+<div class="w-full bg-surface-container rounded-lg border border-outline-variant/30 overflow-hidden shadow-sm">
+<div class="px-space-base py-space-sm bg-surface-container-high border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-primary">security</span>
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider font-semibold">AI Guardrails &amp; Constitution</span>
+</div>
+<span class="font-code-sm text-code-sm text-outline">Google AI Studio</span>
+</div>
+<div class="p-space-base space-y-space-md">
+<!-- Directive 01 -->
+<div class="space-y-space-2xs pb-space-xs border-b border-outline-variant/20">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Input Sanitization &amp; Anti-Injection Layer</span>
+<span class="font-code-sm text-code-sm text-primary bg-surface-container-highest px-1.5 py-0.5 rounded border border-outline-variant/40">ENFORCED</span>
+</div>
+<div class="flex items-center justify-between text-outline font-code-sm text-code-sm">
+<span>Violations (24h): 0 attempts</span>
+<span>Rule ID: #SEC-9901</span>
+</div>
+</div>
+<!-- Directive 02 -->
+<div class="space-y-space-2xs pb-space-xs border-b border-outline-variant/20">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Tenant Isolation Protocol</span>
+<span class="font-code-sm text-code-sm text-primary bg-surface-container-highest px-1.5 py-0.5 rounded border border-outline-variant/40">ACTIVE</span>
+</div>
+<div class="text-outline font-code-sm text-code-sm">
+              Path lock: <code class="text-secondary font-mono">users/{uid}/*</code> strictly enforced
+            </div>
+</div>
+<!-- Directive 03 -->
+<div class="space-y-space-2xs">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Secret Manager Key Rotation</span>
+<span class="font-code-sm text-code-sm text-secondary bg-surface-container-highest px-1.5 py-0.5 rounded border border-outline-variant/40">SECURE</span>
+</div>
+<div class="flex items-center justify-between text-outline font-code-sm text-code-sm">
+<span>Auto-Rotated: 6h ago</span>
+<span>Zero-Client Leak</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Firestore Persistence Live Stream -->
+<div class="w-full bg-surface-container rounded-lg border border-outline-variant/30 overflow-hidden shadow-sm">
+<div class="px-space-base py-space-sm bg-surface-container-high border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-primary">database</span>
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider font-semibold">Firestore Persistence Stream</span>
+</div>
+<div class="flex items-center gap-1 text-outline hover:text-on-surface font-code-sm text-code-sm cursor-pointer">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span>AUTO-SYNC</span>
+</div>
+</div>
+<div class="p-space-base space-y-space-md">
+<!-- Live Monospace Audit Stream -->
+<div class="space-y-1.5 font-code-sm text-code-sm">
+<div class="p-space-xs rounded bg-surface-container-lowest border border-outline-variant/30 text-on-surface flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="text-primary font-medium">[14:24:20] WRITE</span>
+<span class="text-secondary">200 OK · 42ms</span>
+</div>
+<span class="text-outline truncate font-mono">/users/usr_9981a/journal_logs/doc_txn_4418a992bf01</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-lowest border border-outline-variant/20 text-on-surface-variant flex flex-col gap-0.5 opacity-90">
+<div class="flex items-center justify-between">
+<span class="text-on-surface">[14:22:06] READ</span>
+<span class="text-secondary">200 OK · 18ms</span>
+</div>
+<span class="text-outline truncate font-mono">/users/usr_9981a/security_policies/v2_strict</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-lowest border border-outline-variant/20 text-on-surface-variant flex flex-col gap-0.5 opacity-75">
+<div class="flex items-center justify-between">
+<span class="text-on-surface">[14:19:44] WRITE</span>
+<span class="text-secondary">200 OK · 31ms</span>
+</div>
+<span class="text-outline truncate font-mono">/users/usr_9981a/telemetry_events/ev_009941a</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-lowest border border-outline-variant/20 text-on-surface-variant flex flex-col gap-0.5 opacity-60">
+<div class="flex items-center justify-between">
+<span class="text-on-surface">[14:15:02] READ</span>
+<span class="text-secondary">304 CACHED</span>
+</div>
+<span class="text-outline truncate font-mono">/users/usr_9981a/workspace_metadata/config</span>
+</div>
+</div>
+<!-- Document Inspector Drawer Preview -->
+<div class="border-t border-outline-variant/20 pt-space-xs">
+<div class="flex items-center justify-between text-outline font-label-sm text-label-sm mb-1 uppercase">
+<span>Payload Preview (doc_txn_4418a992bf01)</span>
+<span class="material-symbols-outlined text-[13px]">data_object</span>
+</div>
+<pre class="p-space-xs rounded bg-surface-container-lowest border border-outline-variant/40 font-code-sm text-code-sm text-on-surface overflow-x-auto selection:bg-primary selection:text-surface"><code>{
+  "tenantId": "usr_9981a",
+  "service": "cloud-run-aegis",
+  "status": "COMMITTED",
+  "encryption": "AES-256-GCM"
+}</code></pre>
+</div>
+</div>
+</div>
+<!-- Card 3: Phase 3 Processing Engine & Telemetry -->
+<div class="w-full bg-surface-container rounded-lg border border-outline-variant/30 overflow-hidden shadow-sm">
+<div class="px-space-base py-space-sm bg-surface-container-high border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-primary">memory</span>
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider font-semibold">Phase 3 Processing Engine</span>
+</div>
+<span class="font-code-sm text-code-sm text-outline">Telemetry</span>
+</div>
+<div class="p-space-base space-y-space-md">
+<!-- Analytical Telemetry Metrics -->
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="p-space-xs rounded bg-surface-container-lowest border border-outline-variant/30">
+<div class="font-label-sm text-label-sm text-outline uppercase">Extraction Accuracy</div>
+<div class="font-code-sm text-code-sm text-primary font-semibold mt-0.5">99.4%</div>
+</div>
+<div class="p-space-xs rounded bg-surface-container-lowest border border-outline-variant/30">
+<div class="font-label-sm text-label-sm text-outline uppercase">Policy Strictness</div>
+<div class="font-code-sm text-code-sm text-primary font-semibold mt-0.5">Nominal (1.0)</div>
+</div>
+</div>
+<!-- Memory Footprint Bar -->
+<div class="space-y-space-2xs">
+<div class="flex items-center justify-between font-code-sm text-code-sm">
+<span class="text-outline">Cloud Run Container Memory</span>
+<span class="text-on-surface font-medium">214 MB / 1024 MB</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full overflow-hidden border border-outline-variant/30">
+<div class="h-full bg-primary w-[21%]"></div>
+</div>
+</div>
+<!-- Primary Control Button -->
+<div class="pt-space-xs space-y-space-xs">
+<button class="w-full py-space-xs px-space-md rounded bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface border border-outline-variant/40 transition-colors font-headline-sm text-headline-sm font-medium flex items-center justify-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>Trigger Firestore Sync &amp; Re-Index</span>
+</button>
+<div class="text-center font-code-sm text-code-sm text-outline">
+              Next scheduled cron: 00:00 UTC via Cloud Scheduler
+            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-Interaction JavaScript -->
+<script>
+  // Simple prompt execution interaction demo
+  document.getElementById('promptInput')?.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      const val = this.value.trim();
+      if (!val) return;
+      this.value = '';
+    }
+  });
+
+  // Toggle feedback for Constitution View button
+  document.getElementById('viewConstitutionBtn')?.addEventListener('click', function() {
+    this.classList.toggle('border-primary');
+    this.classList.toggle('text-primary');
+  });
+</script></main></div></body></html>

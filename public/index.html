@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>AEGIS / STUDIO · Personal AI Strategic Journal</title>
+  <meta name="description" content="Personal AI Strategic Reflection Journal with Google Cloud Run, Gemini GenAI, Firestore tenant isolation, and automated action item extraction."/>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#131315",
+            "surface-dim": "#131315",
+            "surface-bright": "#39393b",
+            "surface-container-lowest": "#0e0e10",
+            "surface-container-low": "#1c1b1d",
+            "surface-container": "#201f22",
+            "surface-container-high": "#2a2a2c",
+            "surface-container-highest": "#353437",
+            "on-surface": "#e5e1e4",
+            "on-surface-variant": "#c4c7c8",
+            "inverse-surface": "#e5e1e4",
+            "inverse-on-surface": "#313032",
+            "outline": "#8e9192",
+            "outline-variant": "#444748",
+            "surface-tint": "#c6c6c7",
+            "primary": "#ffffff",
+            "on-primary": "#2f3131",
+            "primary-container": "#e2e2e2",
+            "on-primary-container": "#636565",
+            "secondary": "#c6c6cf",
+            "on-secondary": "#2f3037",
+            "secondary-container": "#45464e",
+            "on-secondary-container": "#b4b4bd",
+            "background": "#131315",
+            "on-background": "#e5e1e4",
+            "error": "#ffb4ab"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "sm": "0.125rem",
+            "md": "0.25rem",
+            "lg": "0.375rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          spacing: {
+            "space-2xs": "0.125rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.75rem",
+            "space-base": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-2xl": "3rem",
+            "sidebar-width": "16rem",
+            "inspector-width": "22rem"
+          },
+          fontFamily: {
+            "display-lg": ["Inter", "sans-serif"],
+            "headline-lg": ["Inter", "sans-serif"],
+            "headline-md": ["Inter", "sans-serif"],
+            "headline-sm": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "label-md": ["JetBrains Mono", "monospace"],
+            "label-sm": ["JetBrains Mono", "monospace"],
+            "code-sm": ["JetBrains Mono", "monospace"],
+            "caption": ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #131315;
+        color: #e5e1e4;
+        font-family: 'Inter', sans-serif;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+    }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0e0e10;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2a2a2c;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444748;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.18s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-background font-body-md text-on-background selection:bg-primary selection:text-surface-container-lowest">
+
+  <!-- ========================================== -->
+  <!-- TOP NAVIGATION BAR -->
+  <!-- ========================================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest border-b border-outline-variant/30 h-14">
+    <div class="h-14 w-full px-space-base flex items-center justify-between gap-space-base">
+      
+      <!-- Brand -->
+      <div class="flex items-center gap-space-md">
+        <div class="flex items-center gap-space-xs cursor-pointer" onclick="location.reload()">
+          <div class="w-7 h-7 bg-primary text-on-primary flex items-center justify-center rounded">
+            <svg class="w-4 h-4 text-on-primary" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M60 26L88 42V68C88 85.6 76 97.4 60 102C44 97.4 32 85.6 32 68V42L60 26Z" stroke="currentColor" stroke-width="10" stroke-linejoin="round"/>
+              <path d="M60 40V88" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>
+              <path d="M46 54L60 68L74 54" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="font-headline-sm text-headline-sm font-semibold tracking-tight text-primary">AEGIS <span class="text-outline">/</span> JOURNAL</span>
+        </div>
+      </div>
+
+      <!-- Right Actions: Sign In / Account -->
+      <div class="flex items-center gap-2">
+        <!-- Unauthenticated State: Clear Sign In Button -->
+        <button class="px-3 py-1.5 rounded-[2px] bg-white text-[#18181B] hover:bg-[#F4F4F5] font-sans text-xs font-semibold tracking-wide transition-all flex items-center gap-1.5 shadow cursor-pointer" id="signInTopBtn" onclick="toggleModal('authModal', true)">
+          <span class="material-symbols-outlined text-[15px]">lock</span>
+          <span>Sign In</span>
+        </button>
+
+        <!-- Authenticated State: User Account Badge (Hidden when unauthenticated) -->
+        <div class="hidden items-center gap-2" id="userAuthContainer">
+          <button class="flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-[#18181B] border border-[#27272A] hover:border-[#52525B] transition-colors" id="authTriggerBtn" title="Account & Authentication">
+            <div class="w-6 h-6 rounded-full bg-white text-[#18181B] flex items-center justify-center font-bold text-[10px]" id="userAvatarText">
+              EA
+            </div>
+            <span class="font-mono text-xs text-[#FAFAFA] max-w-[180px] truncate" id="userEmailBadge">
+              admin@aegis-enterprise.iam.gserviceaccount.com
+            </span>
+          </button>
+          <button class="p-1.5 rounded-[2px] text-[#71717A] hover:text-white hover:bg-[#27272A] transition-colors" onclick="handleSignOut()" title="Sign Out">
+            <span class="material-symbols-outlined text-[16px]">logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- LEFT SIDEBAR: CHAT HISTORY & SCOPE (APPLET-AZURE PARITY) -->
+  <!-- ========================================== -->
+  <aside class="fixed left-0 top-14 bottom-0 w-sidebar-width bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col z-40">
+    
+    <!-- Top Action: + New Chat -->
+    <div class="p-space-sm border-b border-outline-variant/20">
+      <button class="w-full py-space-xs px-space-sm rounded bg-surface-container-high hover:bg-primary hover:text-on-primary text-primary border border-outline-variant/40 transition-colors font-body-sm font-medium flex items-center justify-center gap-space-xs" id="newChatBtn">
+        <span class="material-symbols-outlined text-[16px]">add</span>
+        <span>New chat</span>
+      </button>
+    </div>
+
+    <!-- Chat History List Header -->
+    <div class="px-space-sm pt-space-sm pb-space-2xs flex items-center justify-between">
+      <span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Chat History</span>
+      <span class="material-symbols-outlined text-outline text-[16px] cursor-pointer" onclick="fetchSessions()">history</span>
+    </div>
+    
+    <!-- Dynamic Session List Container -->
+    <nav class="flex-1 p-space-sm space-y-1 overflow-y-auto" id="sessionListContainer">
+      <!-- Injected via app.js -->
+    </nav>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- MAIN WORKSPACE: ASYMMETRIC 65% / 35% SHELL -->
+  <!-- ========================================== -->
+  <div class="pl-sidebar-width">
+    <main class="relative pt-14 w-full bg-background min-h-screen">
+      <div class="flex flex-col w-full">
+        <div class="w-full flex flex-col xl:flex-row items-stretch min-h-[calc(100vh-3.5rem)]">
+          
+          <!-- ========================================== -->
+          <!-- FULL-WIDTH STRATEGIC INTELLIGENCE WORKSPACE -->
+          <!-- ========================================== -->
+          <div class="w-full flex flex-col justify-between bg-surface-container-lowest min-h-[calc(100vh-3.5rem)]">
+            
+            <!-- Sub-Header & Scope Metadata Bar (Applet-Azure Badges) -->
+            <div class="px-space-lg py-space-md border-b border-outline-variant/30 bg-surface-container-low flex flex-wrap items-center justify-between gap-space-sm">
+              
+              <!-- Left Badges & Title -->
+              <div class="flex items-center gap-space-xs flex-wrap">
+                <span class="font-label-sm text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-container-highest text-primary border border-outline-variant/40">
+                  PERSONAL AI JOURNAL
+                </span>
+                <span class="font-label-sm text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-container-high text-secondary border border-outline-variant/30 flex items-center gap-1">
+                  <span>🚀</span> AI Reflection
+                </span>
+                <span class="font-label-sm text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-container-high text-secondary border border-outline-variant/30 flex items-center gap-1">
+                  <span>✓</span> Auto-Sync
+                </span>
+                <span class="font-label-sm text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-container-high text-secondary border border-outline-variant/30 flex items-center gap-1">
+                  <span>📄</span> Markdown Ready
+                </span>
+              </div>
+
+              <!-- Right Action Controls -->
+              <div class="flex items-center gap-space-xs">
+                <!-- Save Status Indicator -->
+                <div class="inline-flex items-center gap-1 px-2 py-1 rounded bg-surface-container border border-outline-variant/30 font-code-sm text-[11px] text-primary" id="saveStatusBadge">
+                  <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  <span>Saved ✓</span>
+                </div>
+
+                <!-- Markdown Export -->
+                <button class="p-1.5 rounded bg-surface-container border border-outline-variant/30 text-on-surface hover:text-primary hover:border-outline transition-colors" id="exportMarkdownBtn" title="Download Session Markdown">
+                  <span class="material-symbols-outlined text-[15px]">download</span>
+                </button>
+
+                <!-- Export JSON -->
+                <button class="px-space-xs py-1 rounded bg-surface-container border border-outline-variant/30 text-on-surface hover:text-primary hover:border-outline text-body-sm font-body-sm transition-colors flex items-center gap-space-2xs" id="exportJsonBtn">
+                  <span class="material-symbols-outlined text-[14px]">code</span>
+                  <span class="hidden sm:inline">JSON</span>
+                </button>
+
+                <!-- Clear Context -->
+                <button class="p-1.5 rounded bg-surface-container border border-outline-variant/30 text-outline hover:text-on-surface hover:border-outline transition-colors" id="clearContextBtn" title="Clear Canvas Context">
+                  <span class="material-symbols-outlined text-[15px]">delete_sweep</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Interaction Stream Canvas (Centered Container) -->
+            <div class="flex-1 overflow-y-auto px-space-lg py-space-xl space-y-space-xl max-h-[calc(100vh-14.5rem)]">
+              <div class="max-w-4xl mx-auto w-full space-y-space-xl" id="streamCanvas">
+              
+                <!-- Turn 1: User Query -->
+                <div class="flex flex-col items-end space-y-space-2xs max-w-2xl ml-auto">
+                  <div class="px-space-base py-space-sm bg-surface-container-highest border border-outline-variant/40 rounded-lg text-primary text-body-md font-body-md shadow-sm selection:bg-primary selection:text-surface-container-lowest">
+                    Today was a productive day. I completed the architectural migration of our service, but encountered high latency in the egress VPC connector. Need to review memory thresholds and optimize query logs tomorrow.
+                  </div>
+                  <div class="flex items-center gap-space-xs text-outline font-code-sm text-code-sm">
+                    <span>10:01 PM You</span>
+                    <span>·</span>
+                    <span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">done_all</span> Delivered</span>
+                  </div>
+                </div>
+
+                <!-- Turn 1: AI Strategic Reflection Card -->
+                <div class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg overflow-hidden shadow-sm" id="ai-card-sample-01">
+                  <!-- Engine Header -->
+                  <div class="px-space-base py-space-xs bg-surface-container border-b border-outline-variant/30 flex flex-wrap items-center justify-between gap-space-sm">
+                    <div class="flex items-center gap-space-sm">
+                      <span class="inline-flex items-center gap-space-2xs px-space-xs py-space-2xs rounded bg-surface-container-highest border border-outline-variant/40 font-code-sm text-code-sm text-primary font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                        Gemini 1.5 Pro
+                      </span>
+                      <span class="font-code-sm text-code-sm text-outline">1.24s · 860 tok/sec</span>
+                    </div>
+                    <div class="inline-flex items-center gap-space-2xs px-space-xs py-space-2xs rounded bg-surface-container-high border border-outline-variant/30 font-code-sm text-code-sm text-secondary">
+                      <span class="material-symbols-outlined text-[13px] text-primary">verified</span>
+                      Validated by Aegis Guardrail
+                    </div>
+                  </div>
+
+                  <!-- Card Content Body -->
+                  <div class="p-space-base space-y-space-lg">
+                    <!-- Section A: Strategic Reflection -->
+                    <div class="space-y-space-xs">
+                      <div class="flex items-center gap-space-xs">
+                        <span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">01 / Strategic Reflection &amp; Synthesis</span>
+                        <div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+                      </div>
+                      <div class="font-body-md text-body-md text-on-surface leading-relaxed" id="summary-content-ai-card-sample-01">
+                        Strong execution on completing the architectural service migration. The egress VPC connector latency in <span class="font-code-sm text-code-sm text-primary bg-surface-container-high px-1 py-0.5 rounded">asia-east1</span> indicates a potential subnet CIDR saturation or throughput bottleneck rather than application logic fault. Container concurrency and memory headroom remained stable.
+                      </div>
+                    </div>
+
+                    <!-- Section B: Extracted Action Items Checklist -->
+                    <div class="space-y-space-xs">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-space-xs">
+                          <span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">02 / Extracted Action Items</span>
+                          <div class="h-[1px] w-12 bg-outline-variant/20"></div>
+                        </div>
+                        <span class="font-code-sm text-code-sm text-secondary" id="progress-text-ai-card-sample-01">
+                          1 of 3 complete (33%)
+                        </span>
+                      </div>
+                      <div class="w-full h-1 bg-surface-container-lowest rounded-full overflow-hidden">
+                        <div class="h-full bg-primary transition-all duration-300" id="progress-bar-ai-card-sample-01" style="width: 33%"></div>
+                      </div>
+                      <div class="space-y-space-xs pt-1" id="action-list-ai-card-sample-01">
+                        <div class="flex items-start gap-space-sm p-space-xs rounded bg-surface-container-high/30 border border-outline-variant/20 hover:border-outline/40 transition-colors" data-action-index="0">
+                          <input checked="" type="checkbox" class="w-4 h-4 rounded bg-surface border border-outline-variant text-primary focus:ring-0 accent-primary cursor-pointer mt-0.5" onchange="toggleActionItem('doc_txn_sample_01', 0, this.checked, 'ai-card-sample-01')"/>
+                          <div class="flex-1 font-body-sm text-body-sm line-through text-outline transition-all">
+                            Finalize service migration DNS cutover and route verification.
+                          </div>
+                          <span class="font-code-sm text-[10px] uppercase px-1.5 py-0.5 rounded bg-surface-container border text-primary border-outline">
+                            High
+                          </span>
+                        </div>
+                        <div class="flex items-start gap-space-sm p-space-xs rounded bg-surface-container-high/30 border border-outline-variant/20 hover:border-outline/40 transition-colors" data-action-index="1">
+                          <input type="checkbox" class="w-4 h-4 rounded bg-surface border border-outline-variant text-primary focus:ring-0 accent-primary cursor-pointer mt-0.5" onchange="toggleActionItem('doc_txn_sample_01', 1, this.checked, 'ai-card-sample-01')"/>
+                          <div class="flex-1 font-body-sm text-body-sm text-on-surface transition-all">
+                            Audit VPC connector throughput parameters and adjust CIDR range (/28 to /26).
+                          </div>
+                          <span class="font-code-sm text-[10px] uppercase px-1.5 py-0.5 rounded bg-surface-container border text-secondary border-outline-variant">
+                            Medium
+                          </span>
+                        </div>
+                        <div class="flex items-start gap-space-sm p-space-xs rounded bg-surface-container-high/30 border border-outline-variant/20 hover:border-outline/40 transition-colors" data-action-index="2">
+                          <input type="checkbox" class="w-4 h-4 rounded bg-surface border border-outline-variant text-primary focus:ring-0 accent-primary cursor-pointer mt-0.5" onchange="toggleActionItem('doc_txn_sample_01', 2, this.checked, 'ai-card-sample-01')"/>
+                          <div class="flex-1 font-body-sm text-body-sm text-on-surface transition-all">
+                            Review Cloud Run container memory thresholds and configure automated query log filtering.
+                          </div>
+                          <span class="font-code-sm text-[10px] uppercase px-1.5 py-0.5 rounded bg-surface-container border text-outline border-outline-variant/30">
+                            Low
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Section C: Hashtags -->
+                    <div class="flex items-center gap-1.5 flex-wrap pt-space-xs border-t border-outline-variant/20">
+                      <span class="font-code-sm text-[11px] text-secondary bg-surface-container px-2 py-0.5 rounded border border-outline-variant/30">#ArchitectureMigration</span>
+                      <span class="font-code-sm text-[11px] text-secondary bg-surface-container px-2 py-0.5 rounded border border-outline-variant/30">#VPCConnector</span>
+                      <span class="font-code-sm text-[11px] text-secondary bg-surface-container px-2 py-0.5 rounded border border-outline-variant/30">#LatencyOptimization</span>
+                    </div>
+
+                    <!-- Quick Action Toolbar -->
+                    <div class="pt-space-xs border-t border-outline-variant/20 flex items-center justify-between flex-wrap gap-space-xs">
+                      <div class="flex items-center gap-space-xs">
+                        <button class="px-space-sm py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 text-on-surface hover:text-primary font-body-sm text-xs transition-colors flex items-center gap-1" onclick="refineCardSummary('ai-card-sample-01', 'Strong execution on completing the architectural service migration.')">
+                          <span class="material-symbols-outlined text-[13px]">auto_fix_high</span>
+                          <span>Refine Summary</span>
+                        </button>
+                        <button class="px-space-sm py-1 rounded bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 text-on-surface hover:text-primary font-body-sm text-xs transition-colors flex items-center gap-1" onclick="downloadCardMarkdown('ai-card-sample-01', 'Strong execution on completing the architectural service migration.')">
+                          <span class="material-symbols-outlined text-[13px]">download</span>
+                          <span>Download .MD</span>
+                        </button>
+                      </div>
+                      <button class="text-outline hover:text-primary transition-colors p-1" title="Copy Content" onclick="copyCardContent('ai-card-sample-01')">
+                        <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Attached File Preview Chip (Applet-Azure Parity) -->
+            <div class="px-space-base pt-space-xs hidden items-center justify-center bg-surface-container-lowest" id="fileAttachmentChip">
+              <div class="max-w-4xl w-full flex items-center justify-between">
+                <div class="inline-flex items-center gap-2 px-space-sm py-1 rounded bg-surface-container-high border border-outline-variant/40 font-code-sm text-xs text-primary">
+                  <span class="material-symbols-outlined text-[15px] text-secondary">description</span>
+                  <span id="fileNameLabel">architecture-log.json (2.4 KB)</span>
+                  <button class="text-outline hover:text-primary transition-colors ml-2" id="removeFileBtn">
+                    <span class="material-symbols-outlined text-[14px]">close</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hidden File Input -->
+            <input type="file" id="fileInput" class="hidden" accept=".txt,.md,.json,.log,.csv"/>
+
+            <!-- Pinned Operational Interaction Bar (Applet-Azure Toolbar) -->
+            <div class="sticky bottom-0 left-0 right-0 p-space-base bg-surface-container-lowest border-t border-outline-variant/30 backdrop-blur-md">
+              <div class="max-w-4xl mx-auto w-full bg-surface-container border border-outline-variant/40 rounded-lg p-space-xs space-y-space-xs shadow-md">
+                
+                <!-- Main Input Toolbar Row -->
+                <div class="flex items-center gap-space-xs px-space-xs">
+                  
+                  <!-- File Attachment Icon -->
+                  <button class="text-outline hover:text-primary transition-colors p-space-2xs rounded hover:bg-surface-container-high" id="attachFileTrigger" title="Attach Architecture File / Log (.txt, .md, .json, .log)">
+                    <span class="material-symbols-outlined text-[18px]">attachment</span>
+                  </button>
+
+                  <!-- Prompt Cycler Icon (<>) -->
+                  <button class="text-outline hover:text-primary transition-colors p-space-2xs rounded hover:bg-surface-container-high" id="promptCyclerBtn" title="Cycle through Architectural Reflection Prompts">
+                    <span class="material-symbols-outlined text-[18px]">code</span>
+                  </button>
+
+                  <!-- Text Input Field -->
+                  <input class="w-full bg-transparent border-none outline-none text-on-surface placeholder:text-outline text-body-md font-body-md focus:ring-0" id="promptInput" placeholder="Reflect on your day, challenges, or thoughts..." type="text"/>
+
+                  <!-- Speech-to-Text Voice Dictation -->
+                  <button class="text-outline hover:text-primary transition-colors p-space-2xs rounded hover:bg-surface-container-high" id="voiceDictationBtn" title="Start Speech-to-Text Voice Dictation">
+                    <span class="material-symbols-outlined text-[18px]">mic</span>
+                  </button>
+
+                  <!-- Keyboard Shortcut Tag -->
+                  <div class="hidden md:flex items-center gap-1 px-space-xs py-space-2xs rounded bg-surface-container-high border border-outline-variant/30 text-outline font-code-sm text-[10px] cursor-pointer" onclick="document.getElementById('promptInput').focus()">
+                    <span>⌘</span><span>K</span>
+                  </div>
+
+                  <!-- Send / Execute Button -->
+                  <button class="px-space-md py-space-2xs rounded bg-primary text-on-primary hover:bg-primary-fixed transition-colors font-headline-sm text-headline-sm font-semibold flex items-center gap-1 active:scale-[0.99]" id="executeBtn">
+                    <span>Send</span>
+                    <span class="material-symbols-outlined text-[16px]">send</span>
+                  </button>
+                </div>
+
+                <!-- Parameter Toggle Tray -->
+                <div class="flex flex-wrap items-center justify-between pt-space-xs border-t border-outline-variant/20 px-space-xs">
+                  <div class="flex items-center gap-space-sm">
+                    <label class="inline-flex items-center gap-space-2xs cursor-pointer select-none">
+                      <input checked="" class="w-3.5 h-3.5 rounded bg-surface border border-outline-variant text-primary focus:ring-0 accent-primary" id="jsonSchemaCheckbox" type="checkbox"/>
+                      <span class="font-code-sm text-code-sm text-on-surface-variant">JSON Schema Mode</span>
+                    </label>
+                    <span class="text-outline-variant">·</span>
+                    <label class="inline-flex items-center gap-space-2xs cursor-pointer select-none">
+                      <input checked="" class="w-3.5 h-3.5 rounded bg-surface border border-outline-variant text-primary focus:ring-0 accent-primary" id="deterministicCheckbox" type="checkbox"/>
+                      <span class="font-code-sm text-code-sm text-on-surface-variant">Deterministic (0.0)</span>
+                    </label>
+                  </div>
+
+                  <!-- Model Selector -->
+                  <div class="flex items-center gap-1">
+                    <span class="font-label-sm text-[11px] text-outline">Model:</span>
+                    <select class="bg-surface-container-high text-primary font-code-sm text-xs rounded px-1.5 py-0.5 border border-outline-variant/30 outline-none cursor-pointer" id="modelSelect">
+                      <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+                      <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                      <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: FIREBASE AUTHENTICATION (PRODUCTION-GRADE) -->
+  <!-- ========================================== -->
+  <div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 animate-fadeIn" id="authModal">
+    <div class="w-full max-w-md bg-[#18181B] border border-[#27272A] rounded-[2px] shadow-2xl overflow-hidden flex flex-col" id="authModalCard">
+      
+      <!-- Modal Header -->
+      <div class="px-4 py-3 bg-[#18181B] border-b border-[#27272A] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#FAFAFA] text-[18px]">lock</span>
+          <h3 class="font-sans text-[#FAFAFA] font-semibold text-sm tracking-tight">Firebase Authentication</h3>
+        </div>
+        <button class="text-[#71717A] hover:text-[#FAFAFA] transition-colors p-1 rounded-[2px] hover:bg-[#27272A]" onclick="toggleModal('authModal', false)">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      
+      <!-- Segmented Tab Switcher -->
+      <div class="p-1.5 bg-[#121214] border-b border-[#27272A] flex gap-1.5" id="authTabContainer">
+        <button class="flex-1 py-1.5 rounded-[2px] bg-[#27272A] text-white font-sans text-xs font-medium transition-all shadow-sm" id="tabSignIn">
+          Sign In
+        </button>
+        <button class="flex-1 py-1.5 rounded-[2px] text-[#71717A] hover:text-white font-sans text-xs font-medium transition-all" id="tabRegister">
+          Create Account
+        </button>
+      </div>
+
+      <!-- Alert / Status Notification Banner -->
+      <div class="mx-4 mt-4 p-2.5 rounded-[2px] font-mono text-xs border hidden flex items-start gap-2" id="authAlert">
+        <span class="material-symbols-outlined text-[16px] mt-0.5" id="authAlertIcon">info</span>
+        <div class="flex-1 leading-relaxed" id="authAlertText">Status message</div>
+      </div>
+
+      <div class="p-4 space-y-4">
+        
+        <!-- 1. Sign In Form -->
+        <form class="space-y-3.5" id="formSignIn" onsubmit="event.preventDefault(); handleEmailSignIn();">
+          <div>
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">EMAIL ADDRESS</label>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="signInEmail" placeholder="architect@enterprise.io" type="email" required value="admin@aegis-enterprise.iam.gserviceaccount.com"/>
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA]">PASSWORD</label>
+              <button type="button" class="text-[#A1A1AA] hover:text-white font-sans text-[11px] transition-colors" id="forgotPasswordLink">
+                Forgot Password?
+              </button>
+            </div>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="signInPassword" placeholder="••••••••••••" type="password" required value="password123"/>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 rounded-[2px] bg-white text-[#18181B] hover:bg-[#F4F4F5] transition-all font-sans text-xs font-semibold tracking-wide flex items-center justify-center gap-2 active:scale-[0.99] shadow" id="submitSignInBtn">
+            <span>Sign In with Firebase</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </button>
+        </form>
+
+        <!-- 2. Create Account Form (Hidden by default) -->
+        <form class="space-y-3.5 hidden" id="formRegister" onsubmit="event.preventDefault(); handleEmailRegister();">
+          <div>
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">FULL NAME</label>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regName" placeholder="Enterprise Architect" type="text" required/>
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">EMAIL ADDRESS</label>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regEmail" placeholder="architect@enterprise.io" type="email" required/>
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">PASSWORD</label>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="regPassword" placeholder="•••••••••••• (Min. 6 Characters)" type="password" minlength="6" required/>
+          </div>
+          
+          <button type="submit" class="w-full py-2.5 rounded-[2px] bg-white text-[#18181B] hover:bg-[#F4F4F5] transition-all font-sans text-xs font-semibold tracking-wide flex items-center justify-center gap-2 active:scale-[0.99] shadow" id="submitRegisterBtn">
+            <span>Create Account</span>
+            <span class="material-symbols-outlined text-[16px]">person_add</span>
+          </button>
+        </form>
+
+        <!-- 3. Forgot Password Form (Hidden by default) -->
+        <form class="space-y-3.5 hidden" id="formForgotPassword" onsubmit="event.preventDefault(); handlePasswordReset();">
+          <p class="font-sans text-xs text-[#A1A1AA] leading-relaxed">
+            Enter your account email address below. We'll send you a secure Firebase password reset verification link.
+          </p>
+          <div>
+            <label class="block font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] mb-1.5">EMAIL ADDRESS</label>
+            <input class="w-full px-3 py-2 bg-[#09090B] border border-[#27272A] rounded-[2px] text-[#FAFAFA] text-xs font-sans focus:border-[#71717A] outline-none transition-colors placeholder-[#52525B]" id="resetEmail" placeholder="architect@enterprise.io" type="email" required/>
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-[2px] bg-white text-[#18181B] hover:bg-[#F4F4F5] transition-all font-sans text-xs font-semibold tracking-wide flex items-center justify-center gap-2 shadow" id="submitResetBtn">
+            <span>Send Password Reset Email</span>
+            <span class="material-symbols-outlined text-[16px]">mail</span>
+          </button>
+          <button type="button" class="w-full py-1.5 rounded-[2px] text-[#71717A] hover:text-white font-mono text-xs transition-colors flex items-center justify-center gap-1" id="backToSignInBtn">
+            <span class="material-symbols-outlined text-[14px]">arrow_back</span>
+            <span>Back to Sign In</span>
+          </button>
+        </form>
+
+        <!-- Secondary Providers Divider -->
+        <div class="flex items-center gap-2 pt-1" id="authDivider">
+          <div class="h-[1px] flex-1 bg-[#27272A]"></div>
+          <span class="font-mono text-[10px] uppercase text-[#71717A]">or</span>
+          <div class="h-[1px] flex-1 bg-[#27272A]"></div>
+        </div>
+
+        <!-- Secondary Action Buttons -->
+        <div class="space-y-2" id="authSecondaryActions">
+          <!-- Google Sign-In Button -->
+          <button type="button" class="w-full py-2.5 rounded-[2px] bg-[#18181B] hover:bg-[#27272A] border border-[#27272A] text-[#FAFAFA] hover:text-white font-sans text-xs font-medium transition-colors flex items-center justify-center gap-2.5" id="googleSignInBtn" onclick="handleGoogleSignIn()">
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/>
+              <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/>
+              <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.1s.7 5.4 1.9 7.8l3.7-2.9z"/>
+              <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16c1.8 3.7 5.6 6.3 10.1 6.3z"/>
+            </svg>
+            <span>Sign in with Google</span>
+          </button>
+
+          <!-- 1-Click Demo Account Access -->
+          <button type="button" class="w-full py-2 rounded-[2px] bg-[#201f22] hover:bg-[#27272A] border border-[#27272A] text-[#A1A1AA] hover:text-white font-mono text-[11px] transition-colors flex items-center justify-center gap-1.5" id="demoLoginBtn" onclick="handleDemoSignIn()">
+            <span class="material-symbols-outlined text-[14px]">badge</span>
+            <span>1-Click Enterprise Service Account Access</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Footer Metadata Bar -->
+      <div class="px-4 py-2 bg-[#121214] border-t border-[#27272A] flex justify-between items-center text-[#71717A] font-mono text-[11px]">
+        <span>Tenant: <code class="text-[#A1A1AA]" id="authTenantPath">users/{uid}/*</code></span>
+        <span class="flex items-center gap-1">
+          <span class="material-symbols-outlined text-[13px]">shield</span>
+          <span>AES-256</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none" id="toastContainer"></div>
+
+  <!-- Load Client Orchestration -->
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
