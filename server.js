@@ -112,7 +112,40 @@ let isFirebaseLive = false;
 
 try {
   const saPath = path.join(__dirname, 'serviceAccountKey.json');
-  if (fs.existsSync(saPath)) {
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    let raw = process.env.FIREBASE_SERVICE_ACCOUNT.trim();
+    if (raw.startsWith('{')) {
+      const sa = JSON.parse(raw);
+      if (sa.private_key) sa.private_key = sa.private_key.replace(/\\n/g, '\n');
+      admin.initializeApp({
+        credential: admin.credential.cert(sa),
+        projectId: sa.project_id || FIREBASE_PROJECT_ID
+      });
+    } else {
+      const buff = Buffer.from(raw, 'base64').toString('utf8');
+      const sa = JSON.parse(buff);
+      if (sa.private_key) sa.private_key = sa.private_key.replace(/\\n/g, '\n');
+      admin.initializeApp({
+        credential: admin.credential.cert(sa),
+        projectId: sa.project_id || FIREBASE_PROJECT_ID
+      });
+    }
+    firestoreDb = admin.firestore();
+    isFirebaseLive = true;
+    console.log(`[AEGIS/ADMIN] 🔥 Firebase Admin SDK initialized via FIREBASE_SERVICE_ACCOUNT env var for project: ${FIREBASE_PROJECT_ID}`);
+  } else if (process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+      }),
+      projectId: FIREBASE_PROJECT_ID
+    });
+    firestoreDb = admin.firestore();
+    isFirebaseLive = true;
+    console.log(`[AEGIS/ADMIN] 🔥 Firebase Admin SDK initialized via FIREBASE_PRIVATE_KEY env var.`);
+  } else if (fs.existsSync(saPath)) {
     const serviceAccount = JSON.parse(fs.readFileSync(saPath, 'utf8'));
     if (serviceAccount.private_key) {
       serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
