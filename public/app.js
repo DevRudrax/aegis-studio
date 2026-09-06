@@ -342,9 +342,9 @@ function formatFirebaseAuthError(code, message) {
   switch (code) {
     case 'auth/configuration-not-found':
     case 'auth/operation-not-allowed':
-      return 'Google/Email Sign-In is not enabled in Firebase Console. Please go to Firebase Console > Authentication > Sign-in method and enable Google & Email/Password for project "rudra-584b5".';
+      return `Authentication is not enabled yet in your Firebase project. <a href="https://console.firebase.google.com/project/rudra-584b5/authentication/providers" target="_blank" class="underline font-semibold text-white hover:text-[#38bdf8] transition-colors inline-flex items-center gap-1 mt-1 block">Click here to enable Google & Email/Password in Firebase Console &rarr;</a>`;
     case 'auth/unauthorized-domain':
-      return `The domain "${window.location.hostname}" is not authorized. In Firebase Console, go to Authentication > Settings > Authorized domains and add "${window.location.hostname}".`;
+      return `Domain "${window.location.hostname}" is not authorized. <a href="https://console.firebase.google.com/project/rudra-584b5/authentication/settings" target="_blank" class="underline font-semibold text-white hover:text-[#38bdf8] transition-colors inline-flex items-center gap-1 mt-1 block">Click here to add "${window.location.hostname}" to Authorized Domains &rarr;</a>`;
     case 'auth/popup-blocked':
       return 'The sign-in popup was blocked by your browser. Please allow popups for this site.';
     case 'auth/popup-closed-by-user':
@@ -378,7 +378,7 @@ function showAuthAlert(message, type = 'error') {
   const alertIcon = document.getElementById('authAlertIcon');
   if (!alertEl || !alertText) return;
 
-  alertText.textContent = message;
+  alertText.innerHTML = message;
   alertEl.classList.remove('hidden', 'border-error/40', 'bg-error/10', 'text-error', 'border-primary/40', 'bg-surface-container-high', 'text-primary');
 
   if (type === 'error') {
